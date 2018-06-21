@@ -1,16 +1,28 @@
+/* global qq */
 import React from 'react'
 import PropTypes from 'prop-types'
 import _extend from 'extend'
-
-const qq = window.qq
-const QQMapPlugin = window.QQMapPlugin
 
 const defaultCenter = {
   lat: 39.921984,
   lng: 116.418261
 }
 
-export default class Map extends React.Component {
+class Map extends React.Component {
+  static propTypes = {
+    position: PropTypes.oneOfType([
+      PropTypes.array,
+      PropTypes.shape({
+        lat: PropTypes.number,
+        lng: PropTypes.number
+      })
+    ]),
+    style: PropTypes.object,
+    mapOptions: PropTypes.object,
+    className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    center: PropTypes.any
+  }
+
   static defaultProps = {
     position: defaultCenter,
     mapOptions: {},
@@ -26,7 +38,7 @@ export default class Map extends React.Component {
       mapOptions: {
         zoom: 14,
         mapTypeControl: false,
-        scaleControl: true,
+        scaleControl: true
       }
     }
   }
@@ -48,23 +60,19 @@ export default class Map extends React.Component {
     this.forceUpdate()
   }
 
-  componentDidUpdate () {
+  componentDidUpdate () {}
 
-  }
-
-  componentWillUnmount () {
-    
-  }
+  componentWillUnmount () {}
 
   initMap = () => {
-    this.map = new qq.maps.Map(this.refs.mapNode, this.options)
+    this.map = new qq.maps.Map(this.mapNode, this.options)
   }
 
-  render() {
+  render () {
     const { style } = this.props
     return (
-      <div className="qmap-container">
-        <div ref='mapNode' className={this.props.className} style={style}>
+      <div className='qmap-container'>
+        <div ref={node => (this.mapNode = node)} className={this.props.className} style={style}>
           加载地图中...
         </div>
       </div>
@@ -72,9 +80,4 @@ export default class Map extends React.Component {
   }
 }
 
-Map.propsType = {
-  center: PropTypes.oneOfType([PropTypes.array, PropTypes.shape({
-    lat: PropTypes.number,
-    lng: PropTypes.number
-  })])
-}
+export default Map

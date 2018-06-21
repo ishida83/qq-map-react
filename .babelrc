@@ -1,4 +1,13 @@
 {
   "presets": ["env"],
-  "plugins": ["transform-class-properties"]
+  "plugins": ["transform-class-properties"],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true,
+      "experimentalObjectRestSpread": true
+    }
+  }
 }
