@@ -3,13 +3,5 @@
   "plugins": [
     "react"
   ],
-  "parserOptions": {
-    "sourceType": "module",
-    "allowImportExportEverywhere": false,
-    "codeFrame": false,
-    "ecmaFeatures": {
-      "jsx": true
-    }
-  },
   "extends": ["eslint:recommended", "plugin:react/recommended"]
 }
