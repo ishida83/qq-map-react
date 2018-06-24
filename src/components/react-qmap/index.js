@@ -3,6 +3,7 @@ import HeatMap from './HeatMap'
 import Marker from './Marker'
 import MarkerList from './MarkerList'
 import Info from './Info'
+import Polyline from './Polyline'
 import * as utils from './utils'
 
 export {
@@ -11,5 +12,6 @@ export {
   Marker,
   MarkerList,
   Info,
+  Polyline,
   utils
 }

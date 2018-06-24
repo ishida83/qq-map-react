@@ -9,6 +9,13 @@ const getAddressByLatLng = ({ lat, lng }) => {
   })
 }
 
+const convertorPointsToPath = points => {
+  return points.map(({ lat, lng }) => {
+    return new qq.maps.LatLng(lat, lng)
+  })
+}
+
 export {
-  getAddressByLatLng
+  getAddressByLatLng,
+  convertorPointsToPath
 }
