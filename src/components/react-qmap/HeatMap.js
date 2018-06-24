@@ -1,5 +1,6 @@
 /* global qq, QQMapPlugin */
 import React from 'react'
+import PropTypes from 'prop-types'
 
 export default class HeatMap extends React.Component {
   static defaultProps = {
@@ -12,8 +13,15 @@ export default class HeatMap extends React.Component {
     heatData: {
       max: 100,
       data: []
-    },
-    map: undefined
+    }
+  }
+
+  static propTypes = {
+    options: PropTypes.object,
+    heatData: PropTypes.shape({
+      max: PropTypes.number,
+      data: PropTypes.arrayOf(PropTypes.object)
+    })
   }
 
   componentDidMount () {

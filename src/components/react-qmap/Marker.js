@@ -1,5 +1,6 @@
 /* global qq */
 import React from 'react'
+import PropTypes from 'prop-types'
 import { ANIMATION_DROP } from './constants'
 
 export default class Marker extends React.Component {
@@ -7,6 +8,20 @@ export default class Marker extends React.Component {
     position: {},
     animation: ANIMATION_DROP,
     onClick: () => {}
+  }
+
+  static propTypes = {
+    position: PropTypes.shape({
+      lat: PropTypes.number,
+      lng: PropTypes.number
+    }),
+    animation: PropTypes.oneOf([
+      qq.maps.MarkerAnimation.BOUNCE,
+      qq.maps.MarkerAnimation.DROP,
+      qq.maps.MarkerAnimation.UP,
+      qq.maps.MarkerAnimation.DOWN
+    ]),
+    onClose: PropTypes.func
   }
 
   componentDidMount () {

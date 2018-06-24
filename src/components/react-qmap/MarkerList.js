@@ -1,12 +1,21 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Marker from './Marker'
 
 export default class MarkerList extends React.Component {
   static defaultProps = {
     list: [],
-    value: {},
     onClick: () => {}
   }
+
+  static propTypes = {
+    list: PropTypes.arrayOf(PropTypes.shape({
+      lat: PropTypes.number,
+      lng: PropTypes.number
+    })),
+    onClose: PropTypes.func
+  }
+
   render () {
     const { list, map, onClick } = this.props
     if (!map) return null

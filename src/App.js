@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './App.css'
-import { QMap, HeatMap, Marker, MarkerList, Info, utils } from './components'
+import { QMap, HeatMap, MarkerList, Info, utils } from './components'
 import data from './data'
 
 const heatMapOptions = {

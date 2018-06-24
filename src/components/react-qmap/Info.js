@@ -1,5 +1,6 @@
 /* global qq */
 import React from 'react'
+import PropTypes from 'prop-types'
 
 export default class Info extends React.Component {
   static defaultProps = {
@@ -7,6 +8,16 @@ export default class Info extends React.Component {
     position: {},
     content: '测试',
     onClose: () => {}
+  }
+
+  static propTypes = {
+    visible: PropTypes.bool,
+    position: PropTypes.shape({
+      lat: PropTypes.number,
+      lng: PropTypes.number
+    }),
+    content: PropTypes.string,
+    onClose: PropTypes.func
   }
 
   componentDidMount () {
