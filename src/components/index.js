@@ -1,5 +1,1 @@
-import { Map } from './react-qmap'
-
-export {
-  Map
-}
+export * from './react-qmap'
