@@ -5,6 +5,7 @@ import MarkerList from './MarkerList'
 import Info from './Info'
 import Polyline from './Polyline'
 import * as utils from './utils'
+import * as config from './constants'
 
 export {
   QMap,
@@ -13,5 +14,6 @@ export {
   MarkerList,
   Info,
   Polyline,
-  utils
+  utils,
+  config
 }

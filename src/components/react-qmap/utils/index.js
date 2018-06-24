@@ -1,21 +1,31 @@
 /* global qq */
-const getAddressByLatLng = ({ lat, lng }) => {
+const getAddressByPosition = ({ lat, lng }) => {
+  return getAddressByLatLng(pointToLatLng({lat, lng}))
+}
+
+const getAddressByLatLng = latLng => {
   return new Promise(resolve => {
     const geocoder = new qq.maps.Geocoder({
       complete: result => resolve(result)
     })
 
-    geocoder.getAddress(new qq.maps.LatLng(lat, lng))
+    geocoder.getAddress(latLng)
   })
 }
 
 const convertorPointsToPath = points => {
   return points.map(({ lat, lng }) => {
-    return new qq.maps.LatLng(lat, lng)
+    return pointToLatLng(lat, lng)
   })
+}
+
+const pointToLatLng = ({ lat, lng }) => {
+  return new qq.maps.LatLng(lat, lng)
 }
 
 export {
   getAddressByLatLng,
-  convertorPointsToPath
+  convertorPointsToPath,
+  getAddressByPosition,
+  pointToLatLng
 }

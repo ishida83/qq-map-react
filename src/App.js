@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './App.css'
-import { QMap, HeatMap, MarkerList, Info, utils, Polyline } from './components'
+import { QMap, HeatMap, MarkerList, Info, utils, Polyline, Marker, config } from './components'
 import data from './data'
 
 const heatMapOptions = {
@@ -10,12 +10,18 @@ const heatMapOptions = {
   valueField: 'cnt'
 }
 
+// 默认首都
+const defaultCenter = {
+  lat: 39.921984,
+  lng: 116.418261
+}
+
 class App extends Component {
   constructor (props) {
     super(props)
     this.state = {
       showInfo: false,
-      center: data[0],
+      center: utils.pointToLatLng(data[0] || defaultCenter),
       polylineVisible: true
     }
   }
@@ -28,15 +34,15 @@ class App extends Component {
     }, 5000)
   }
 
-  handleMarkerClick = position => {
-    console.log(position)
-    utils.getAddressByLatLng(position).then(result => {
+  handleMarkerClick = () => {
+    console.log('marker click')
+    const { center } = this.state
+    utils.getAddressByLatLng(center).then(result => {
       console.log(result)
       const { detail: { nearPois, address } } = result
       this.setState({
         content: `${address}${nearPois[0].name}`,
-        showInfo: true,
-        center: position
+        showInfo: true
       })
     })
   }
@@ -51,17 +57,31 @@ class App extends Component {
     const { showInfo, center, content, polylineVisible } = this.state
     return (
       <div className='App'>
-        <QMap position={center} style={{ height: '800px' }}>
+        <QMap
+          center={center}
+          style={{ height: '800px' }}
+          zoom={14}
+        >
           <HeatMap heatData={{ data }} options={heatMapOptions} />
-          <MarkerList list={data.slice(0, 10)} onClick={this.handleMarkerClick} />
-          <Info onClose={this.handleInfoClose} content={content} visible={showInfo} position={center} />
-          <Polyline
-            points={data.slice(0, 10)}
-            visible={polylineVisible}
-            options={{
-              editable: true
+          <Marker
+            position={center}
+            visible
+            animation={config.ANIMATION_DROP}
+            events={{
+              click: this.handleMarkerClick
             }}
           />
+          {/*
+            <MarkerList list={data.slice(0, 10)} onClick={this.handleMarkerClick} />
+            <Info onClose={this.handleInfoClose} content={content} visible={showInfo} position={center} />
+            <Polyline
+              points={data.slice(0, 10)}
+              visible={polylineVisible}
+              options={{
+                editable: true
+              }}
+            />
+          */}
         </QMap>
       </div>
     )

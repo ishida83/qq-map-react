@@ -1,59 +1,62 @@
 /* global qq */
 import React from 'react'
-import PropTypes from 'prop-types'
-import _extend from 'extend'
+import BaseComponent from './BaseComponent'
 
-// 默认首都
-const defaultCenter = {
-  lat: 39.921984,
-  lng: 116.418261
-}
-
-class QQMap extends React.Component {
-  static propTypes = {
-    position: PropTypes.oneOfType([
-      PropTypes.array,
-      PropTypes.shape({
-        lat: PropTypes.number,
-        lng: PropTypes.number
-      })
-    ]),
-    style: PropTypes.object,
-    mapOptions: PropTypes.object,
-    className: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-    center: PropTypes.any
-  }
-
+class QQMap extends BaseComponent {
   static defaultProps = {
-    position: defaultCenter,
-    mapOptions: {},
     style: {
       height: '600px'
-    },
-    center: new qq.maps.LatLng(defaultCenter.lat, defaultCenter.lng)
+    }
   }
 
-  constructor (props) {
-    super(props)
-    this.state = {
-      mapOptions: {
-        zoom: 14,
-        mapTypeControl: false,
-        scaleControl: true
-      }
-    }
+  get events () {
+    return [
+      'click',
+      'dblclick',
+      'rightclick',
+      'mouseover',
+      'mouseout',
+      'mousemove',
+      'drag',
+      'dragstart',
+      'dragend',
+      'longpress',
+      'bounds_changed',
+      'center_changed',
+      'zoom_changed',
+      'maptypeid_changed',
+      'projection_changed',
+      'idle',
+      'tilesloaded',
+      'resize'
+    ]
   }
 
   get options () {
-    const { position: { lat, lng }, mapOptions, center } = this.props
-    const { mapOptions: options } = this.state
-    const _options = _extend(true, {}, options, mapOptions)
-    if (lat && lng) {
-      _options.center = new qq.maps.LatLng(lat, lng)
-    } else {
-      _options.center = center
-    }
-    return _options
+    return [
+      'center',
+      'zoom',
+      'minZoom',
+      'maxZoom',
+      'mapZoomType',
+      'noClear',
+      'backgroundColor',
+      'boundary',
+      'draggableCursor',
+      'mapTypeId',
+      'draggable',
+      'scrollwheel',
+      'disableDoubleClickZoom',
+      'keyboardShortcuts',
+      'mapTypeControl',
+      'mapTypeControlOptions',
+      'panControl',
+      'panControlOptions',
+      'zoomControl',
+      'zoomControlOptions',
+      'scaleControl',
+      'scaleControlOptions'
+    ]
   }
 
   componentDidMount () {
@@ -65,8 +68,21 @@ class QQMap extends React.Component {
     this.map = null
   }
 
+  componentDidUpdate (prevProps) {
+    const { center, zoom } = prevProps
+    if (zoom !== this.props.zoom) {
+      this.map.zoomTo(this.props.zoom)
+    }
+
+    if (center !== this.props.center) {
+      this.map.panTo(this.props.center)
+    }
+  }
+
   initMap = () => {
-    this.map = new qq.maps.Map(this.mapNode, this.options)
+    const options = this.getOptions(this.options)
+    this.map = new qq.maps.Map(this.mapNode, options)
+    this.bindEvent(this.map, this.events)
   }
 
   onRender = () => {

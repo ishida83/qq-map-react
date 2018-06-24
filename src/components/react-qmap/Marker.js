@@ -1,33 +1,55 @@
 /* global qq */
-import React from 'react'
-import PropTypes from 'prop-types'
-import { ANIMATION_DROP } from './constants'
+import BaseComponent from './BaseComponent'
 
-export default class Marker extends React.Component {
-  static defaultProps = {
-    position: {},
-    animation: ANIMATION_DROP,
-    onClick: () => {},
-    decorationNum: 1,
-    showDecoration: false,
-    visible: true
+export default class Marker extends BaseComponent {
+  get events () {
+    return [
+      'animation_changed',
+      'clickable_changed',
+      'cursor_changed',
+      'draggable_changed',
+      'flat_changed',
+      'icon_changed',
+      'map_changed',
+      'position_changed',
+      'shadow_changed',
+      'shape_changed',
+      'title_changed',
+      'visible_changed',
+      'zindex_changed',
+      'click',
+      'mousedown',
+      'mouseup',
+      'mouseover',
+      'mouseout',
+      'dblclick',
+      'rightclick',
+      'dragstart',
+      'dragging',
+      'dragend',
+      'moving',
+      'moveend'
+    ]
   }
 
-  static propTypes = {
-    position: PropTypes.shape({
-      lat: PropTypes.number,
-      lng: PropTypes.number
-    }),
-    animation: PropTypes.oneOf([
-      qq.maps.MarkerAnimation.BOUNCE,
-      qq.maps.MarkerAnimation.DROP,
-      qq.maps.MarkerAnimation.UP,
-      qq.maps.MarkerAnimation.DOWN
-    ]),
-    decorationNum: PropTypes.number,
-    onClose: PropTypes.func,
-    showDecoration: PropTypes.bool,
-    visible: PropTypes.bool
+  get options () {
+    return [
+      'animation',
+      'clickable',
+      'draggable',
+      'flat',
+      'cursor',
+      'icon',
+      'shadow',
+      'shape',
+      'title',
+      'visible',
+      'zIndex',
+      'map',
+      'position',
+      'rotation',
+      'autoRotation'
+    ]
   }
 
   componentDidMount () {
@@ -39,34 +61,16 @@ export default class Marker extends React.Component {
   }
 
   initMarker = () => {
-    const {
-      map,
-      position: { lat, lng },
-      animation,
-      onClick,
-      showDecoration,
-      decorationNum = 1,
-      visible = true
-    } = this.props
+    const { map } = this.props
     if (!map) return
+    const options = this.getOptions(this.options)
     qq.maps.event.addListenerOnce(map, 'tilesloaded', () => {
-      const config = {
-        position: new qq.maps.LatLng(lat, lng),
-        animation
-      }
-
-      if (showDecoration) config.decoration = new qq.maps.MarkerDecoration(decorationNum, new qq.maps.Point(0, -5))
       if (!this.marker) {
-        this.marker = new qq.maps.Marker(config)
-        qq.maps.event.addListener(this.marker, 'click', () => {
-          onClick({
-            lat,
-            lng
-          })
-        })
+        this.marker = new qq.maps.Marker(options)
+        this.bindEvent(this.marker, this.events)
       }
 
-      visible ? this.marker.setMap(map) : this.marker.setMap(null)
+      options.visible ? this.marker.setMap(map) : this.marker.setMap(null)
     })
   }
 

@@ -1,6 +1,7 @@
 /* global qq */
 import React from 'react'
 import PropTypes from 'prop-types'
+import { pointToLatLng } from './utils'
 
 export default class Info extends React.Component {
   static defaultProps = {
@@ -30,7 +31,7 @@ export default class Info extends React.Component {
 
   initInfo = () => {
     const { map, visible, position: { lat, lng }, content, onClose } = this.props
-    const latLng = new qq.maps.LatLng(lat, lng)
+    const latLng = pointToLatLng(lat, lng)
     if (!map) return
     if (!this.info) {
       this.info = new qq.maps.InfoWindow({
