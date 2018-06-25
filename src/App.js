@@ -21,7 +21,7 @@ class App extends Component {
     super(props)
     this.state = {
       showInfo: false,
-      center: utils.pointToLatLng(data[0] || defaultCenter),
+      center: data[0] || defaultCenter,
       polylineVisible: true
     }
   }
@@ -34,10 +34,9 @@ class App extends Component {
     }, 5000)
   }
 
-  handleMarkerClick = () => {
+  handleMarkerClick = position => {
     console.log('marker click')
-    const { center } = this.state
-    utils.getAddressByLatLng(center).then(result => {
+    utils.getAddressByPosition(position).then(result => {
       console.log(result)
       const { detail: { nearPois, address } } = result
       this.setState({
@@ -60,17 +59,19 @@ class App extends Component {
         <QMap
           center={center}
           style={{ height: '800px' }}
-          zoom={14}
+          zoom={16}
         >
           <HeatMap heatData={{ data }} options={heatMapOptions} />
           <Marker
             position={center}
             visible
+            decoration="1"
             animation={config.ANIMATION_DROP}
             events={{
-              click: this.handleMarkerClick
+              click: () => this.handleMarkerClick(center)
             }}
           />
+          <MarkerList showDecoration list={data.slice(0, 10)} onClick={this.handleMarkerClick} />
           {/*
             <MarkerList list={data.slice(0, 10)} onClick={this.handleMarkerClick} />
             <Info onClose={this.handleInfoClose} content={content} visible={showInfo} position={center} />

@@ -1,12 +1,21 @@
 /* global qq */
 import React from 'react'
 import BaseComponent from './BaseComponent'
+import PropTypes from 'prop-types'
+import { pointToLatLng } from './utils/'
 
 class QQMap extends BaseComponent {
   static defaultProps = {
     style: {
       height: '600px'
     }
+  }
+
+  static propTypes = {
+    center: PropTypes.shape({
+      lat: PropTypes.number,
+      lng: PropTypes.number
+    })
   }
 
   get events () {
@@ -70,17 +79,19 @@ class QQMap extends BaseComponent {
 
   componentDidUpdate (prevProps) {
     const { center, zoom } = prevProps
+    const curCenter = pointToLatLng(this.props.center)
     if (zoom !== this.props.zoom) {
       this.map.zoomTo(this.props.zoom)
     }
 
     if (center !== this.props.center) {
-      this.map.panTo(this.props.center)
+      this.map.panTo(curCenter)
     }
   }
 
   initMap = () => {
     const options = this.getOptions(this.options)
+    options.center = pointToLatLng(options.center)
     this.map = new qq.maps.Map(this.mapNode, options)
     this.bindEvent(this.map, this.events)
   }

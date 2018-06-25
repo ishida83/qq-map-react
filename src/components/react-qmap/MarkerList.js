@@ -15,8 +15,7 @@ export default class MarkerList extends React.Component {
         lat: PropTypes.number,
         lng: PropTypes.number
       })
-    ),
-    onClose: PropTypes.func
+    )
   }
 
   render () {
@@ -26,11 +25,12 @@ export default class MarkerList extends React.Component {
       return (
         <Marker
           key={i}
-          showDecoration={showDecoration}
-          decorationNum={i + 1}
+          decoration={showDecoration ? (i + 1) : null}
           position={item}
           map={map}
-          onClick={position => onClick(position, i)}
+          events={{
+            click: () => onClick(item, i)
+          }}
         />
       )
     })

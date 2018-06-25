@@ -1,7 +1,21 @@
 /* global qq */
 import BaseComponent from './BaseComponent'
+import PropTypes from 'prop-types'
+import { pointToLatLng } from './utils'
 
 export default class Marker extends BaseComponent {
+  static defaultProps = {
+    decoration: '',
+    visible: true
+  }
+
+  static propTypes = {
+    position: PropTypes.shape({
+      lat: PropTypes.number,
+      lng: PropTypes.number
+    })
+  }
+
   get events () {
     return [
       'animation_changed',
@@ -60,10 +74,19 @@ export default class Marker extends BaseComponent {
     this.initMarker()
   }
 
+  componentWillUnmount () {
+    this.marker.setMap(null)
+    this.marker = null
+  }
+
   initMarker = () => {
-    const { map } = this.props
+    const { map, decoration } = this.props
     if (!map) return
     const options = this.getOptions(this.options)
+    options.position = pointToLatLng(options.position)
+    if (decoration) {
+      options.decoration = new qq.maps.MarkerDecoration(decoration, new qq.maps.Point(0, -5))
+    }
     qq.maps.event.addListenerOnce(map, 'tilesloaded', () => {
       if (!this.marker) {
         this.marker = new qq.maps.Marker(options)

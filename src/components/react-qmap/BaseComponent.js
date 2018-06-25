@@ -9,7 +9,6 @@ export default class BaseComponent extends React.Component {
    */
   bindEvent (obj, events) {
     const self = this
-    console.log(this)
     if (events.length) {
       events.forEach(event => {
         if (Object.prototype.toString.call(obj) === '[object HTMLTableElement]') {
