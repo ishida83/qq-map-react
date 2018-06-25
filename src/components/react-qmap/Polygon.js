@@ -58,8 +58,11 @@ export default class Polygon extends BaseComponent {
     this.initPolygon()
   }
 
-  componentDidUpdate () {
-    this.initPolygon()
+  componentDidUpdate (prevProps) {
+    if (prevProps.points !== this.props.points) {
+      const path = convertorPointsToPath(this.props.points)
+      this.polygon.setPath(path)
+    }
   }
 
   initPolygon = () => {

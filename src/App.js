@@ -98,12 +98,10 @@ class App extends Component {
             }}
           />
           */}
-          {/*
           <MarkerList showDecoration animation={config.ANIMATION_DROP} list={data.slice(0, 10)} onClick={this.handleMarkerClick} visible={false} />
           <Info content={content} visible={showInfo} position={infoPosition} events={{
-            close: () => this.handleInfoClose()
+            closeclick: () => this.handleInfoClose()
           }} />
-          */}
           <Polygon visible points={polygonPoints} editable draggable events={{
             adjustNode: e => this.handlePolygonChange(e),
             removeNode: e => this.handlePolygonChange(e),
