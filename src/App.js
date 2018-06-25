@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './App.css'
-import { QMap, HeatMap, MarkerList, Info, utils, Polyline, Marker, config } from './components'
+import { QMap, HeatMap, MarkerList, Info, utils, config } from './components'
 import data from './data'
 
 const heatMapOptions = {
@@ -22,6 +22,7 @@ class App extends Component {
     this.state = {
       showInfo: false,
       center: data[0] || defaultCenter,
+      infoPosition: data[0] || defaultCenter,
       polylineVisible: true
     }
   }
@@ -41,7 +42,8 @@ class App extends Component {
       const { detail: { nearPois, address } } = result
       this.setState({
         content: `${address}${nearPois[0].name}`,
-        showInfo: true
+        showInfo: true,
+        infoPosition: position
       })
     })
   }
@@ -53,7 +55,7 @@ class App extends Component {
   }
 
   render () {
-    const { showInfo, center, content, polylineVisible } = this.state
+    const { showInfo, center, content, infoPosition } = this.state
     return (
       <div className='App'>
         <QMap
@@ -62,19 +64,21 @@ class App extends Component {
           zoom={16}
         >
           <HeatMap heatData={{ data }} options={heatMapOptions} />
-          <Marker
+          {/* <Marker
             position={center}
             visible
             decoration="1"
             animation={config.ANIMATION_DROP}
             events={{
-              click: () => this.handleMarkerClick(center)
+              click: e => this.handleMarkerClick(center, e)
             }}
-          />
-          <MarkerList showDecoration list={data.slice(0, 10)} onClick={this.handleMarkerClick} />
+          /> */}
+          <MarkerList showDecoration animation={config.ANIMATION_DROP} list={data.slice(0, 10)} onClick={this.handleMarkerClick} />
+          <Info content={content} visible={showInfo} position={infoPosition} events={{
+            close: () => this.handleInfoClose()
+          }} />
           {/*
             <MarkerList list={data.slice(0, 10)} onClick={this.handleMarkerClick} />
-            <Info onClose={this.handleInfoClose} content={content} visible={showInfo} position={center} />
             <Polyline
               points={data.slice(0, 10)}
               visible={polylineVisible}

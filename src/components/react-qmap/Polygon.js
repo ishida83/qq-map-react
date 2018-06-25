@@ -8,10 +8,7 @@ export default class Polygon extends React.Component {
     points: [],
     options: {},
     visible: true,
-    editable: true,
-    adjustNode: () => {},
-    removeNode: () => {},
-    insertNode: () => {}
+    editable: true
   }
 
   static propTypes = {
@@ -23,6 +20,25 @@ export default class Polygon extends React.Component {
     ),
     options: PropTypes.object,
     visible: PropTypes.bool
+  }
+
+  get events () {
+    return [
+      'map_changed',
+      'visible_changed',
+      'zindex_changed',
+      'click',
+      'dblclick',
+      'rightclick',
+      'mousedown',
+      'mouseup',
+      'mouseover',
+      'mouseout',
+      'mousemove',
+      'insertNode',
+      'removeNode',
+      'adjustNode'
+    ]
   }
 
   componentDidMount () {

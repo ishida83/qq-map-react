@@ -1,14 +1,13 @@
 /* global qq */
-import React from 'react'
 import PropTypes from 'prop-types'
+import BaseComponent from './BaseComponent'
 import { pointToLatLng } from './utils'
 
-export default class Info extends React.Component {
+export default class Info extends BaseComponent {
   static defaultProps = {
     visible: false,
     position: {},
-    content: '测试',
-    onClose: () => {}
+    content: '测试'
   }
 
   static propTypes = {
@@ -17,8 +16,15 @@ export default class Info extends React.Component {
       lat: PropTypes.number,
       lng: PropTypes.number
     }),
-    content: PropTypes.string,
-    onClose: PropTypes.func
+    content: PropTypes.any
+  }
+
+  get events () {
+    return ['content_changed', 'position_changed', 'zindex_changed', 'domready', 'closeclick']
+  }
+
+  get options () {
+    return ['content', 'position', 'zIndex', 'visible']
   }
 
   componentDidMount () {
@@ -30,17 +36,23 @@ export default class Info extends React.Component {
   }
 
   initInfo = () => {
-    const { map, visible, position: { lat, lng }, content, onClose } = this.props
-    const latLng = pointToLatLng(lat, lng)
+    const {
+      map,
+      visible,
+      position: { lat, lng }
+    } = this.props
+    const latLng = pointToLatLng({lat, lng})
+    const options = this.getOptions(this.options)
+    options.position = latLng
     if (!map) return
     if (!this.info) {
       this.info = new qq.maps.InfoWindow({
+        ...options,
         map: map
       })
-
-      qq.maps.event.addListener(this.info, 'closeclick', onClose)
+      this.bindEvent(this.info, this.events)
     }
-    let infoContent = `<div style="width: 100%;max-width: 300px;text-align:left;">${content}</div>`
+    let infoContent = `<div style="width: 100%;max-width: 300px;text-align:left;">${options.content}</div>`
     this.info.setPosition(latLng)
     this.info.setContent(infoContent)
     visible ? this.info.open() : this.info.close()

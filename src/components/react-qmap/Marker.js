@@ -62,7 +62,8 @@ export default class Marker extends BaseComponent {
       'map',
       'position',
       'rotation',
-      'autoRotation'
+      'autoRotation',
+      'decoration'
     ]
   }
 
@@ -70,8 +71,10 @@ export default class Marker extends BaseComponent {
     this.initMarker()
   }
 
-  componentDidUpdate () {
-    this.initMarker()
+  componentDidUpdate (prevProps) {
+    if (prevProps.position !== this.props.position) {
+      this.marker.setPosition(pointToLatLng(this.props.position))
+    }
   }
 
   componentWillUnmount () {

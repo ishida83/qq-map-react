@@ -7,7 +7,7 @@ export default class BaseComponent extends React.Component {
    * @param {element} obj 事件对象
    * @param {array} events 事件数组
    */
-  bindEvent (obj, events) {
+  bindEvent = (obj, events) => {
     const self = this
     if (events.length) {
       events.forEach(event => {
@@ -29,7 +29,7 @@ export default class BaseComponent extends React.Component {
    * @param {element} obj 事件对象
    * @param {object} toggleMethods 属性和对应的2个切换方法
    */
-  bindToggleMeghods (obj, toggleMethods) {
+  bindToggleMeghods = (obj, toggleMethods) => {
     for (let key in toggleMethods) {
       if (this.props[key] !== undefined) {
         if (this.props[key]) {
@@ -45,9 +45,9 @@ export default class BaseComponent extends React.Component {
    * 返回组件支持的属性对象
    * @param {array} opts 组件各自支持的属性对象集合
    */
-  getOptions (opts) {
+  getOptions = (opts) => {
     let result = {}
-    opts.map(key => {
+    opts.forEach(key => {
       if (this.props[key] !== undefined) {
         result[key] = this.props[key]
       }
