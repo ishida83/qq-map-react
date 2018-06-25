@@ -24,11 +24,14 @@ export default class MarkerList extends React.Component {
     const { list, map, onClick, showDecoration = true, animation } = this.props
     if (!map) return null
     return list.map((item, i) => {
+      let isVisible = true
+      if (typeof item.visible !== 'undefined') isVisible = item.visible
       return (
         <Marker
           key={i}
           decoration={showDecoration ? (i + 1) : null}
           position={item}
+          visible={isVisible}
           animation={animation}
           map={map}
           events={{

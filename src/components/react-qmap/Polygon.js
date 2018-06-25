@@ -1,14 +1,11 @@
 /* global qq */
-import React from 'react'
+import BaseComponent from './BaseComponent'
 import PropTypes from 'prop-types'
 import { convertorPointsToPath } from './utils'
 
-export default class Polygon extends React.Component {
+export default class Polygon extends BaseComponent {
   static defaultProps = {
-    points: [],
-    options: {},
-    visible: true,
-    editable: true
+    points: []
   }
 
   static propTypes = {
@@ -18,7 +15,6 @@ export default class Polygon extends React.Component {
         lng: PropTypes.number
       })
     ),
-    options: PropTypes.object,
     visible: PropTypes.bool
   }
 
@@ -41,6 +37,23 @@ export default class Polygon extends React.Component {
     ]
   }
 
+  get options () {
+    return [
+      'clickable',
+      'cursor',
+      'editable',
+      'fillColor',
+      'map',
+      'path',
+      'strokeColor',
+      'strokeDashStyle',
+      'strokeWeight',
+      'visible',
+      'zIndex',
+      'draggable'
+    ]
+  }
+
   componentDidMount () {
     this.initPolygon()
   }
@@ -50,19 +63,16 @@ export default class Polygon extends React.Component {
   }
 
   initPolygon = () => {
-    const { points, visible, options, map } = this.props
+    const { points, visible, map } = this.props
     const path = convertorPointsToPath(points)
-    const _options = {
-      ...options,
-      path
-    }
+    const options = this.getOptions(this.options)
+    options.path = path
     if (!map) return
     if (!this.polygon) {
-      this.polygon = new qq.maps.Polygon(_options)
-
-      // qq.maps.addEventListener(this.polygon, '')
+      this.polygon = new qq.maps.Polygon(options)
+      this.bindEvent(this.polygon, this.events)
     }
-    this.polygon.setOptions(_options)
+    this.polygon.setOptions(options)
     visible ? this.polygon.setMap(map) : this.polygon.setMap(null)
   }
   render () {

@@ -14,8 +14,8 @@ const getAddressByLatLng = latLng => {
 }
 
 const convertorPointsToPath = points => {
-  return points.map(({ lat, lng }) => {
-    return pointToLatLng(lat, lng)
+  return points.map(position => {
+    return pointToLatLng(position)
   })
 }
 

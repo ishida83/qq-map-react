@@ -4,6 +4,7 @@ import Marker from './Marker'
 import MarkerList from './MarkerList'
 import Info from './Info'
 import Polyline from './Polyline'
+import Polygon from './Polygon'
 import * as utils from './utils'
 import * as config from './constants'
 
@@ -15,5 +16,6 @@ export {
   Info,
   Polyline,
   utils,
-  config
+  config,
+  Polygon
 }

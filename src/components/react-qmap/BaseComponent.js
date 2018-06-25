@@ -16,8 +16,8 @@ export default class BaseComponent extends React.Component {
             self.props.events && self.props.events[event] && self.props.events[event].apply(self, arguments)
           })
         } else {
-          qq.maps.event.addListener(obj, event, () => {
-            self.props.events && self.props.events[event] && self.props.events[event].apply(self, arguments)
+          qq.maps.event.addListener(obj, event, mouseEvent => {
+            self.props.events && self.props.events[event] && self.props.events[event].call(self, mouseEvent)
           })
         }
       })
