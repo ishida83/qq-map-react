@@ -3,6 +3,7 @@ import HeatMap from './HeatMap'
 import Marker from './Marker'
 import MarkerList from './MarkerList'
 import Info from './Info'
+import Circle from './Circle'
 import Polyline from './Polyline'
 import Polygon from './Polygon'
 import * as utils from './utils'
@@ -17,5 +18,6 @@ export {
   Polyline,
   utils,
   config,
-  Polygon
+  Polygon,
+  Circle
 }

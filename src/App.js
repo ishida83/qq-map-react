@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './App.css'
-import { QMap, HeatMap, MarkerList, Info, Polygon, utils, config } from './components'
+import { QMap, HeatMap, MarkerList, Info, Polygon, utils, config, Circle } from './components'
 import data from './data'
 
 const heatMapOptions = {
@@ -35,14 +35,16 @@ class App extends Component {
         {lat: roundFun(22.540254259833006), lng: roundFun(113.93162700437068)},
         {lat: roundFun(22.538247172738405), lng: roundFun(113.93028937994002)},
         {lat: roundFun(22.53778185230437), lng: roundFun(113.93348019014356)}
-      ]
+      ],
+      radius: 100
     }
   }
 
   componentDidMount () {
     setTimeout(() => {
       this.setState({
-        polylineVisible: false
+        polylineVisible: false,
+        radius: 600
       })
     }, 5000)
   }
@@ -82,7 +84,7 @@ class App extends Component {
   }
 
   render () {
-    const { showInfo, center, content, infoPosition, polygonPoints } = this.state
+    const { showInfo, center, content, infoPosition, polygonPoints, radius } = this.state
     return (
       <div className="App">
         <QMap center={center} style={{ height: '800px' }} zoom={16}>
@@ -107,6 +109,7 @@ class App extends Component {
             removeNode: e => this.handlePolygonChange(e),
             insertNode: e => this.handlePolygonChange(e)
           }} />
+          <Circle center={center} radius={radius} strokeColor="#666" strokeDashStyle="dash" strokeWeight={2}/>
         </QMap>
       </div>
     )
