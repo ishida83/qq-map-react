@@ -5,14 +5,13 @@ import { ANIMATION_DROP } from './constants'
 
 export default class MarkerList extends React.Component {
   static defaultProps = {
-    list: [],
-    onClick: () => {},
+    data: [],
     animation: ANIMATION_DROP,
     showDecoration: true
   }
 
   static propTypes = {
-    list: PropTypes.arrayOf(
+    data: PropTypes.arrayOf(
       PropTypes.shape({
         lat: PropTypes.number,
         lng: PropTypes.number
@@ -20,25 +19,40 @@ export default class MarkerList extends React.Component {
     )
   }
 
-  render () {
-    const { list, map, onClick, showDecoration = true, animation } = this.props
-    if (!map) return null
-    return list.map((item, i) => {
-      let isVisible = true
-      if (typeof item.visible !== 'undefined') isVisible = item.visible
-      return (
-        <Marker
-          key={i}
-          decoration={showDecoration ? (i + 1) : null}
-          position={item}
-          visible={isVisible}
-          animation={animation}
-          map={map}
-          events={{
-            click: () => onClick(item, i)
-          }}
-        />
-      )
+  constructor (props) {
+    super(props)
+    this.markers = []
+  }
+
+  componentDidMount () {
+    this.initialize()
+  }
+
+  initialize = () => {
+    const { data, showDecoration, ...rest } = this.props
+    this.clearMarkers()
+
+    data.map((m, i) => {
+      const decoration = showDecoration ? (m.decoration ? m.decoration : i) : null
+      this.markers.push(new Marker({
+        ...rest,
+        decoration
+      }))
     })
+  }
+
+  componentWillUnmount () {
+    this.clearMarkers()
+  }
+
+  clearMarkers = () => {
+    this.markers.map(marker => {
+      marker.setMap(null)
+    })
+    this.markers = []
+  }
+
+  render () {
+    return null
   }
 }

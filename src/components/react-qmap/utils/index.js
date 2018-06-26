@@ -23,9 +23,16 @@ const pointToLatLng = ({ lat, lng }) => {
   return new qq.maps.LatLng(lat, lng)
 }
 
+// 简单的首字母大写
+const toPascal = str => {
+  if (!str || str.length === 0) return ''
+  return `${str[0].toUpperCase()}${str.substr(1)}`
+}
+
 export {
   getAddressByLatLng,
   convertorPointsToPath,
   getAddressByPosition,
-  pointToLatLng
+  pointToLatLng,
+  toPascal
 }

@@ -1,9 +1,9 @@
 /* global qq */
-import BaseComponent from './BaseComponent'
+import Graphy from './Graphy'
 import PropTypes from 'prop-types'
 import { pointToLatLng } from './utils'
 
-export default class Circle extends BaseComponent {
+export default class Circle extends Graphy {
   static defaultProps = {
     center: {},
     radius: 10,
@@ -52,32 +52,31 @@ export default class Circle extends BaseComponent {
     ]
   }
 
-  componentDidMount () {
-    this.initCircle()
-  }
+  // componentDidUpdate (prevProps) {
+  //   const { radius, center, visible, zIndex } = prevProps
+  //   if (radius !== this.props.radius) this.circle.setRadius(this.props.radius)
+  //   if (center !== this.props.center) this.circle.setCenter(pointToLatLng(this.props.center))
+  //   if (visible !== this.props.visible) this.circle.setVisible(this.props.visible)
+  //   if (zIndex !== this.props.zIndex) this.circle.setZIndex(this.props.zIndex)
+  // }
 
-  componentDidUpdate (prevProps) {
-    const { radius, center, visible, zIndex } = prevProps
-    if (radius !== this.props.radius) this.circle.setRadius(this.props.radius)
-    if (center !== this.props.center) this.circle.setCenter(pointToLatLng(this.props.center))
-    if (visible !== this.props.visible) this.circle.setVisible(this.props.visible)
-    if (zIndex !== this.props.zIndex) this.circle.setZIndex(this.props.zIndex)
-  }
-
-  initCircle = () => {
-    const { center, map, visible } = this.props
+  _getOptions = () => {
+    const { center } = this.props
     const options = this.getOptions(this.options)
     options.center = pointToLatLng(center)
-    if (!map) return
-    if (this.circle) this.circle.setMap(null)
-    this.circle = new qq.maps.Circle(options)
-    this.bindEvent(this.circle, this.events)
-    this.circle.setOptions(options)
-
-    visible ? this.circle.setMap(map) : this.circle.setMap(null)
+    return options
   }
 
-  render () {
-    return null
+  getOverlay = () => {
+    const { map, visible } = this.props
+    const _options = this._getOptions()
+    if (!map) return
+    if (this.circle) this.circle.setMap(null)
+    this.circle = new qq.maps.Circle(_options)
+    this.bindEvent(this.circle, this.events)
+    this.circle.setOptions(_options)
+
+    visible ? this.circle.setMap(map) : this.circle.setMap(null)
+    return this.circle
   }
 }

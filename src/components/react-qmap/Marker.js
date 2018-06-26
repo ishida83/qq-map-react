@@ -1,9 +1,9 @@
 /* global qq */
-import BaseComponent from './BaseComponent'
 import PropTypes from 'prop-types'
 import { pointToLatLng } from './utils'
+import Graphy from './Graphy'
 
-export default class Marker extends BaseComponent {
+export default class Marker extends Graphy {
   static defaultProps = {
     decoration: '',
     visible: true
@@ -67,40 +67,33 @@ export default class Marker extends BaseComponent {
     ]
   }
 
-  componentDidMount () {
-    this.initMarker()
-  }
+  // componentDidUpdate (prevProps) {
+  //   if (prevProps.position !== this.props.position) {
+  //     this.marker.setPosition(pointToLatLng(this.props.position))
+  //   }
+  // }
 
-  componentDidUpdate (prevProps) {
-    if (prevProps.position !== this.props.position) {
-      this.marker.setPosition(pointToLatLng(this.props.position))
-    }
-  }
-
-  componentWillUnmount () {
-    this.marker.setMap(null)
-    this.marker = null
-  }
-
-  initMarker = () => {
-    const { map, decoration } = this.props
-    if (!map) return
+  _getOptions = () => {
+    const { decoration } = this.props
     const options = this.getOptions(this.options)
     options.position = pointToLatLng(options.position)
     if (decoration) {
       options.decoration = new qq.maps.MarkerDecoration(decoration, new qq.maps.Point(0, -5))
     }
-    qq.maps.event.addListenerOnce(map, 'tilesloaded', () => {
-      if (!this.marker) {
-        this.marker = new qq.maps.Marker(options)
-        this.bindEvent(this.marker, this.events)
-      }
 
-      options.visible ? this.marker.setMap(map) : this.marker.setMap(null)
-    })
+    return options
   }
 
-  render () {
-    return null
+  getOverlay = () => {
+    const { map, visible } = this.props
+    if (!map) return null
+    // 记录副本
+    const _options = this._getOptions()
+    if (!this.marker) {
+      this.marker = new qq.maps.Marker(_options)
+    }
+
+    visible ? this.marker.setMap(map) : this.marker.setMap(null)
+    return this.marker
   }
 }

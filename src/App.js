@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './App.css'
-import { QMap, HeatMap, MarkerList, Info, Polygon, utils, config, Circle } from './components'
+import { QMap, HeatMap, MarkerList, Marker, Info, Polygon, utils, config, Circle } from './components'
 import data from './data'
 
 const heatMapOptions = {
@@ -47,20 +47,20 @@ class App extends Component {
         polylineVisible: false,
         radius: 1000
       })
-    }, 5000)
+    }, 3000)
   }
 
-  handleMarkerClick = position => {
+  handleMarkerClick = marker => {
+    const { position } = marker
     console.log('marker click')
-    utils.getAddressByPosition(position).then(result => {
-      console.log(result)
+    utils.getAddressByLatLng(position).then(result => {
       const {
         detail: { nearPois, address }
       } = result
       this.setState({
         content: `${address}${nearPois[0].name}`,
         showInfo: true,
-        infoPosition: position
+        infoPosition: {...position}
       })
     })
   }
@@ -72,7 +72,6 @@ class App extends Component {
   }
 
   handlePolygonChange = e => {
-    console.log('polygon change')
     const { path: { elems } } = e
     if (elems && elems.length) {
       this.setState({
@@ -85,7 +84,6 @@ class App extends Component {
   }
 
   handleRadiusChange = (radius, circle) => {
-    console.log('radius changed')
     const { map } = this.state
     if (map) {
       map.fitBounds(circle.getBounds())
@@ -99,26 +97,31 @@ class App extends Component {
   }
 
   render () {
-    const { showInfo, center, content, infoPosition, polygonPoints, radius, zoom, map } = this.state
-    if (map) console.log(map.getZoom())
+    const { showInfo, center, content, infoPosition, polygonPoints, radius, zoom } = this.state
+    const markerPosition = {
+      ...center,
+      lng: center.lng + 0.008
+    }
+
     return (
       <div className="App">
         <QMap center={center} style={{ height: '800px' }} zoom={zoom} events={{
           idle: map => this.handleMapIdle(map)
         }}>
           <HeatMap heatData={{ data }} options={heatMapOptions} />
-          {/*
           <Marker
-            position={center}
+            position={markerPosition}
+            draggable={true}
             visible
-            decoration="1"
+            decoration="10"
             animation={config.ANIMATION_DROP}
             events={{
-              click: e => this.handleMarkerClick(center, e)
+              click: this.handleMarkerClick
             }}
           />
-          */}
-          <MarkerList showDecoration animation={config.ANIMATION_DROP} list={data.slice(0, 10)} onClick={this.handleMarkerClick} visible={false} />
+          <MarkerList showDecoration animation={config.ANIMATION_DROP} list={data.slice(0, 10)} events={{
+            click: this.handleMarkerClick
+          }} visible={false} />
           <Info content={content} visible={showInfo} position={infoPosition} events={{
             closeclick: () => this.handleInfoClose()
           }} />
