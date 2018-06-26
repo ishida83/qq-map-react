@@ -36,7 +36,8 @@ class App extends Component {
         {lat: roundFun(22.538247172738405), lng: roundFun(113.93028937994002)},
         {lat: roundFun(22.53778185230437), lng: roundFun(113.93348019014356)}
       ],
-      radius: 100
+      radius: 100,
+      zoom: 16
     }
   }
 
@@ -44,7 +45,7 @@ class App extends Component {
     setTimeout(() => {
       this.setState({
         polylineVisible: false,
-        radius: 600
+        radius: 1000
       })
     }, 5000)
   }
@@ -83,11 +84,28 @@ class App extends Component {
     }
   }
 
+  handleRadiusChange = (radius, circle) => {
+    console.log('radius changed')
+    const { map } = this.state
+    if (map) {
+      map.fitBounds(circle.getBounds())
+    }
+  }
+
+  handleMapIdle = map => {
+    this.setState({
+      map
+    })
+  }
+
   render () {
-    const { showInfo, center, content, infoPosition, polygonPoints, radius } = this.state
+    const { showInfo, center, content, infoPosition, polygonPoints, radius, zoom, map } = this.state
+    if (map) console.log(map.getZoom())
     return (
       <div className="App">
-        <QMap center={center} style={{ height: '800px' }} zoom={16}>
+        <QMap center={center} style={{ height: '800px' }} zoom={zoom} events={{
+          idle: map => this.handleMapIdle(map)
+        }}>
           <HeatMap heatData={{ data }} options={heatMapOptions} />
           {/*
           <Marker
@@ -109,7 +127,9 @@ class App extends Component {
             removeNode: e => this.handlePolygonChange(e),
             insertNode: e => this.handlePolygonChange(e)
           }} />
-          <Circle center={center} radius={radius} strokeColor="#666" strokeDashStyle="dash" strokeWeight={2}/>
+          <Circle center={center} radius={radius} strokeColor="#666" strokeDashStyle="dash" strokeWeight={2} events={{
+            radius_changed: (circle, e) => this.handleRadiusChange(radius, circle, e)
+          }} />
         </QMap>
       </div>
     )

@@ -57,7 +57,11 @@ export default class Circle extends BaseComponent {
   }
 
   componentDidUpdate (prevProps) {
-    this.initCircle()
+    const { radius, center, visible, zIndex } = prevProps
+    if (radius !== this.props.radius) this.circle.setRadius(this.props.radius)
+    if (center !== this.props.center) this.circle.setCenter(pointToLatLng(this.props.center))
+    if (visible !== this.props.visible) this.circle.setVisible(this.props.visible)
+    if (zIndex !== this.props.zIndex) this.circle.setZIndex(this.props.zIndex)
   }
 
   initCircle = () => {
@@ -65,10 +69,9 @@ export default class Circle extends BaseComponent {
     const options = this.getOptions(this.options)
     options.center = pointToLatLng(center)
     if (!map) return
-    if (!this.circle) {
-      this.circle = new qq.maps.Circle(options)
-    }
-
+    if (this.circle) this.circle.setMap(null)
+    this.circle = new qq.maps.Circle(options)
+    this.bindEvent(this.circle, this.events)
     this.circle.setOptions(options)
 
     visible ? this.circle.setMap(map) : this.circle.setMap(null)
