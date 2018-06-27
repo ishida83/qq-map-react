@@ -11,15 +11,9 @@ export default class BaseComponent extends React.Component {
     const self = this
     if (events.length) {
       events.forEach(event => {
-        if (Object.prototype.toString.call(obj) === '[object HTMLTableElement]') {
-          qq.maps.event.addDomListener(obj, event, () => {
-            self.props.events && self.props.events[event] && self.props.events[event].apply(self, arguments)
-          })
-        } else {
-          qq.maps.event.addListener(obj, event, mouseEvent => {
-            self.props.events && self.props.events[event] && self.props.events[event].call(self, obj, mouseEvent)
-          })
-        }
+        qq.maps.event.addListener(obj, event, mouseEvent => {
+          self.props.events && self.props.events[event] && self.props.events[event].call(self, obj, mouseEvent)
+        })
       })
     }
   }

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './App.css'
 import { QMap, HeatMap, MarkerList, Marker, Info, Polygon, utils, config, Circle } from './components'
 import data from './data'
+import CustomerControl from './CustomControl'
 
 const heatMapOptions = {
   radius: 1,
@@ -119,9 +120,9 @@ class App extends Component {
               click: this.handleMarkerClick
             }}
           />
-          <MarkerList showDecoration animation={config.ANIMATION_DROP} list={data.slice(0, 10)} events={{
+          <MarkerList showDecoration animation={config.ANIMATION_DROP} data={data.slice(0, 10)} events={{
             click: this.handleMarkerClick
-          }} visible={false} />
+          }} visible={true} />
           <Info content={content} visible={showInfo} position={infoPosition} events={{
             closeclick: () => this.handleInfoClose()
           }} />
@@ -133,6 +134,11 @@ class App extends Component {
           <Circle center={center} radius={radius} strokeColor="#666" strokeDashStyle="dash" strokeWeight={2} events={{
             radius_changed: (circle, e) => this.handleRadiusChange(radius, circle, e)
           }} />
+          <CustomerControl style={{
+            width: '200px',
+            height: '200px',
+            zIndex: 1
+          }} onChange={console.log} />
         </QMap>
       </div>
     )

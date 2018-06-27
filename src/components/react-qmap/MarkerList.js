@@ -32,8 +32,12 @@ export default class MarkerList extends React.Component {
     const { data, showDecoration, ...rest } = this.props
     this.clearMarkers()
 
-    data.map((m, i) => {
+    data.forEach((m, i) => {
       const decoration = showDecoration ? (m.decoration ? m.decoration : i) : null
+      console.log({
+        ...rest,
+        decoration
+      })
       this.markers.push(new Marker({
         ...rest,
         decoration
@@ -46,13 +50,21 @@ export default class MarkerList extends React.Component {
   }
 
   clearMarkers = () => {
-    this.markers.map(marker => {
+    this.markers.forEach(marker => {
       marker.setMap(null)
     })
     this.markers = []
   }
 
   render () {
-    return null
+    const { data, showDecoration, ...rest } = this.props
+    return data.map((item, i) => {
+      const options = {...rest}
+      options.position = item
+      if (showDecoration) {
+        options.decoration = item.decoration ? item.decoration : (i + 1)
+      }
+      return <Marker key={i} {...options} />
+    })
   }
 }

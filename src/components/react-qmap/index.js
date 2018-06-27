@@ -6,6 +6,7 @@ import Info from './Info'
 import Circle from './Circle'
 import Polyline from './Polyline'
 import Polygon from './Polygon'
+import Control from './Control'
 import * as utils from './utils'
 import * as config from './constants'
 
@@ -19,5 +20,6 @@ export {
   utils,
   config,
   Polygon,
-  Circle
+  Circle,
+  Control
 }

@@ -52,14 +52,6 @@ export default class Circle extends Graphy {
     ]
   }
 
-  // componentDidUpdate (prevProps) {
-  //   const { radius, center, visible, zIndex } = prevProps
-  //   if (radius !== this.props.radius) this.circle.setRadius(this.props.radius)
-  //   if (center !== this.props.center) this.circle.setCenter(pointToLatLng(this.props.center))
-  //   if (visible !== this.props.visible) this.circle.setVisible(this.props.visible)
-  //   if (zIndex !== this.props.zIndex) this.circle.setZIndex(this.props.zIndex)
-  // }
-
   _getOptions = () => {
     const { center } = this.props
     const options = this.getOptions(this.options)
@@ -73,8 +65,6 @@ export default class Circle extends Graphy {
     if (!map) return
     if (this.circle) this.circle.setMap(null)
     this.circle = new qq.maps.Circle(_options)
-    this.bindEvent(this.circle, this.events)
-    this.circle.setOptions(_options)
 
     visible ? this.circle.setMap(map) : this.circle.setMap(null)
     return this.circle

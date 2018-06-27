@@ -14,7 +14,7 @@ export default class Graphy extends BaseComponent {
     const receiveProps = this.options || []
     const curOptions = this._getOptions()
     if (!this.overlay) return
-    receiveProps.map(key => {
+    receiveProps.forEach(key => {
       const props = this.props
       const fnName = `set${toPascal(key)}`
       // 判断前后属性和 set 方法是否存在，如果存在，则执行对应的更新
