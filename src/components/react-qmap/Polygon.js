@@ -1,11 +1,12 @@
 /* global qq */
-import BaseComponent from './BaseComponent'
 import PropTypes from 'prop-types'
 import { convertorPointsToPath } from './utils'
+import Graphy from './Graphy'
 
-export default class Polygon extends BaseComponent {
+export default class Polygon extends Graphy {
   static defaultProps = {
-    points: []
+    points: [],
+    visible: true
   }
 
   static propTypes = {
@@ -54,29 +55,23 @@ export default class Polygon extends BaseComponent {
     ]
   }
 
-  componentDidMount () {
-    this.initPolygon()
-  }
-
-  componentDidUpdate (prevProps) {
-    if (prevProps.points !== this.props.points) {
-      const path = convertorPointsToPath(this.props.points)
-      this.polygon.setPath(path)
-    }
-  }
-
-  initPolygon = () => {
-    const { points, visible, map } = this.props
+  _getOptions = () => {
+    const { points } = this.props
     const path = convertorPointsToPath(points)
     const options = this.getOptions(this.options)
     options.path = path
+    return options
+  }
+
+  getOverlay = () => {
+    const { visible, map } = this.props
+    const options = this._getOptions()
     if (!map) return
     if (!this.polygon) {
       this.polygon = new qq.maps.Polygon(options)
-      this.bindEvent(this.polygon, this.events)
     }
-    this.polygon.setOptions(options)
     visible ? this.polygon.setMap(map) : this.polygon.setMap(null)
+    return this.polygon
   }
   render () {
     return null

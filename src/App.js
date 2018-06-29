@@ -29,6 +29,7 @@ class App extends Component {
       center: data[0] || defaultCenter,
       infoPosition: data[0] || defaultCenter,
       polylineVisible: true,
+      strokeDashStyle: 'solid',
       polygonPoints: [
         {lat: roundFun(22.53779845431509), lng: roundFun(113.93656424389837)},
         {lat: roundFun(22.540574807809087), lng: roundFun(113.93635769115447)},
@@ -46,7 +47,8 @@ class App extends Component {
     setTimeout(() => {
       this.setState({
         polylineVisible: false,
-        radius: 1000
+        radius: 1000,
+        strokeDashStyle: 'dash'
       })
     }, 3000)
   }
@@ -98,7 +100,7 @@ class App extends Component {
   }
 
   render () {
-    const { showInfo, center, content, infoPosition, polygonPoints, radius, zoom } = this.state
+    const { showInfo, center, content, infoPosition, polygonPoints, radius, zoom, strokeDashStyle } = this.state
     const markerPosition = {
       ...center,
       lng: center.lng + 0.008
@@ -126,7 +128,7 @@ class App extends Component {
           <Info content={content} visible={showInfo} position={infoPosition} events={{
             closeclick: () => this.handleInfoClose()
           }} />
-          <Polygon visible points={polygonPoints} editable draggable events={{
+          <Polygon visible points={polygonPoints} strokeDashStyle={strokeDashStyle} editable draggable events={{
             adjustNode: e => this.handlePolygonChange(e),
             removeNode: e => this.handlePolygonChange(e),
             insertNode: e => this.handlePolygonChange(e)

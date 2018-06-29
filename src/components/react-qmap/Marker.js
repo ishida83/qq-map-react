@@ -67,12 +67,6 @@ export default class Marker extends Graphy {
     ]
   }
 
-  // componentDidUpdate (prevProps) {
-  //   if (prevProps.position !== this.props.position) {
-  //     this.marker.setPosition(pointToLatLng(this.props.position))
-  //   }
-  // }
-
   _getOptions = () => {
     const { decoration } = this.props
     const options = this.getOptions(this.options)
