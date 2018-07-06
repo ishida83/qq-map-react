@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './App.css'
 import { QMap, HeatMap, MarkerList, Marker, Info, Polygon, utils, config, Circle } from './components'
-import data from './data'
+import heatData from './data'
 import CustomerControl from './CustomControl'
 
 const heatMapOptions = {
@@ -26,8 +26,8 @@ class App extends Component {
     super(props)
     this.state = {
       showInfo: false,
-      center: data[0] || defaultCenter,
-      infoPosition: data[0] || defaultCenter,
+      center: heatData[0] || defaultCenter,
+      infoPosition: heatData[0] || defaultCenter,
       polylineVisible: true,
       strokeDashStyle: 'solid',
       polygonPoints: [
@@ -38,6 +38,10 @@ class App extends Component {
         {lat: roundFun(22.538247172738405), lng: roundFun(113.93028937994002)},
         {lat: roundFun(22.53778185230437), lng: roundFun(113.93348019014356)}
       ],
+      heatMapData: {
+        max: 100,
+        data: []
+      },
       radius: 100,
       zoom: 16
     }
@@ -48,7 +52,11 @@ class App extends Component {
       this.setState({
         polylineVisible: false,
         radius: 1000,
-        strokeDashStyle: 'dash'
+        strokeDashStyle: 'dash',
+        heatMapData: {
+          max: 100,
+          data: heatData
+        }
       })
     }, 3000)
   }
@@ -94,13 +102,14 @@ class App extends Component {
   }
 
   handleMapIdle = map => {
+    console.log('map idle')
     this.setState({
       map
     })
   }
 
   render () {
-    const { showInfo, center, content, infoPosition, polygonPoints, radius, zoom, strokeDashStyle } = this.state
+    const { showInfo, center, content, infoPosition, polygonPoints, radius, zoom, strokeDashStyle, heatMapData } = this.state
     const markerPosition = {
       ...center,
       lng: center.lng + 0.008
@@ -111,8 +120,8 @@ class App extends Component {
         <QMap center={center} style={{ height: '800px' }} zoom={zoom} events={{
           idle: map => this.handleMapIdle(map)
         }}>
-          <HeatMap heatData={{ data }} options={heatMapOptions} />
-          <Marker
+          <HeatMap heatData={heatMapData} options={heatMapOptions} />
+          {/* <Marker
             position={markerPosition}
             draggable={true}
             visible
@@ -122,7 +131,7 @@ class App extends Component {
               click: this.handleMarkerClick
             }}
           />
-          <MarkerList showDecoration animation={config.ANIMATION_DROP} data={data.slice(0, 10)} events={{
+          <MarkerList showDecoration animation={config.ANIMATION_DROP} data={heatData.slice(0, 10)} events={{
             click: this.handleMarkerClick
           }} visible={true} />
           <Info content={content} visible={showInfo} position={infoPosition} events={{
@@ -141,6 +150,7 @@ class App extends Component {
             height: '200px',
             zIndex: 1
           }} onChange={console.log} />
+        */}
         </QMap>
       </div>
     )

@@ -28,8 +28,10 @@ export default class HeatMap extends React.Component {
     this.initHeatMap()
   }
 
-  componentDidUpdate () {
-    this.initHeatMap()
+  componentDidUpdate (prevProps) {
+    if (prevProps.heatData.data !== this.props.heatData.data && this.heatMap) {
+      this.heatMap.setData(this.props.heatData)
+    }
   }
 
   initHeatMap = () => {
