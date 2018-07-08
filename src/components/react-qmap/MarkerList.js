@@ -34,10 +34,6 @@ export default class MarkerList extends React.Component {
 
     data.forEach((m, i) => {
       const decoration = showDecoration ? (m.decoration ? m.decoration : i) : null
-      console.log({
-        ...rest,
-        decoration
-      })
       this.markers.push(new Marker({
         ...rest,
         decoration

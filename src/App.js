@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './App.css'
-import { QMap, HeatMap, MarkerList, Marker, Info, Polygon, utils, config, Circle } from './components'
+import { QMap, HeatMap, MarkerList, Marker, Info, Polygon, utils, config, Circle, ControlPosition } from './components'
 import heatData from './data'
 import CustomerControl from './CustomControl'
 
@@ -108,6 +108,18 @@ class App extends Component {
     })
   }
 
+  handleChange = val => {
+    console.log(val)
+  }
+
+  handleEdit = () => {
+    window.alert('编辑')
+  }
+
+  handleChoose = () => {
+    window.alert('选择')
+  }
+
   render () {
     const { showInfo, center, content, infoPosition, polygonPoints, radius, zoom, strokeDashStyle, heatMapData } = this.state
     const markerPosition = {
@@ -121,7 +133,7 @@ class App extends Component {
           idle: map => this.handleMapIdle(map)
         }}>
           <HeatMap heatData={heatMapData} options={heatMapOptions} />
-          {/* <Marker
+          <Marker
             position={markerPosition}
             draggable={true}
             visible
@@ -145,12 +157,14 @@ class App extends Component {
           <Circle center={center} radius={radius} strokeColor="#666" strokeDashStyle="dash" strokeWeight={2} events={{
             radius_changed: (circle, e) => this.handleRadiusChange(radius, circle, e)
           }} />
-          <CustomerControl style={{
-            width: '200px',
-            height: '200px',
-            zIndex: 1
-          }} onChange={console.log} />
-        */}
+          <CustomerControl
+            position={ControlPosition.RIGHT_CENTER}
+            style={{
+              zIndex: 999
+            }}
+            onEdit={this.handleEdit}
+            onChoose={this.handleChoose}
+          />
         </QMap>
       </div>
     )
