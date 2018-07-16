@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>添加多边形区域覆盖物</title>
+<style type="text/css">
+*{
+    margin:0px;
+    padding:0px;
+}
+body, button, input, select, textarea {
+    font: 12px/16px Verdana, Helvetica, Arial, sans-serif;
+}
+#info{
+    width:603px;
+    padding-top:3px;
+    overflow:hidden;
+}
+.btn{
+    width:190px;
+}
+#container{
+	min-width:600px;
+	min-height:767px;
+}
+</style>
+<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp"></script>
+<script>
+var init = function() {
+    var center = new qq.maps.LatLng(39.984110,116.307490);
+    var map = new qq.maps.Map(document.getElementById('container'),{
+        center: center,
+        zoom: 13
+    });
+     var path1=[
+        new qq.maps.LatLng(39.999216,116.305389),
+        new qq.maps.LatLng(39.972516,116.299725),
+        new qq.maps.LatLng(39.974489,116.326675)
+    ];
+     var path2=[
+        new qq.maps.LatLng(40.003950,116.285648),
+        new qq.maps.LatLng(40.006185,116.304016),
+        new qq.maps.LatLng(39.984881,116.337147),
+        new qq.maps.LatLng(39.970937,116.313457),
+        new qq.maps.LatLng(39.980146,116.278954)
+    ];
+    var polygon = new qq.maps.Polygon({
+        path:path1,
+        strokeColor: '#000000',
+        strokeWeight: 5,
+        fillColor: '#111111',
+        map: map
+    });
+    //setMap
+    var mapM=document.getElementById("mapM");
+    qq.maps.event.addDomListener(mapM,"click",function(){
+        polygon.setVisible(true);
+        if(polygon.getMap()){
+            polygon.setMap(null);
+        }else{
+            polygon.setMap(map);
+        }
+    });
+    //setCursor
+    var curF=true;
+    var cursor=document.getElementById("cursor");
+    qq.maps.event.addDomListener(cursor,"click",function(){
+        polygon.setMap(map);
+        polygon.setVisible(true);
+        if(curF){
+            curF=false;
+            polygon.setCursor("default");
+        }else{
+            curF=true;
+            polygon.setCursor("pointer");
+        }
+    });
+    //setFillColor
+    var fillCF=true;
+    var fillC=document.getElementById("fillC");
+    qq.maps.event.addDomListener(fillC,"click",function(){
+        polygon.setMap(map);
+        polygon.setVisible(true);
+        if(fillCF){
+            fillCF=false;
+            polygon.setFillColor("#0f0");
+        }else{
+            fillCF=true;
+            polygon.setFillColor("#111");
+        }
+    });
+    //setPath
+    var pathF=true;
+    var path=document.getElementById("path");
+    qq.maps.event.addDomListener(path,"click",function(){
+        polygon.setMap(map);
+        polygon.setVisible(true);
+        if(pathF){
+            pathF=false;
+            polygon.setPath(path2);
+        }else{
+            pathF=true;
+            polygon.setPath(path1);
+        }
+    });
+    //setStrokeColor
+    var strokeCF=true;
+    var strokeC=document.getElementById("strokeC");
+    qq.maps.event.addDomListener(strokeC,"click",function(){
+        polygon.setMap(map);
+        polygon.setVisible(true);
+        if(strokeCF){
+            strokeCF=false;
+            polygon.setStrokeColor("#1c29d8");
+        }else{
+            strokeCF=true;
+            polygon.setStrokeColor("#000");
+        }
+    });
+    //setStrokeDashStyle
+    var dashF=true;
+    var dash=document.getElementById("dash");
+    qq.maps.event.addDomListener(dash,"click",function(){
+        polygon.setMap(map);
+        polygon.setVisible(true);
+        if(dashF){
+            dashF=false;
+            polygon.setStrokeDashStyle("dash");
+        }else{
+            dashF=true;
+            polygon.setStrokeDashStyle("solid");
+        }
+    });
+    //setStrokeWeight
+    var strokeWeightF=true;
+    var strokeWeight=document.getElementById("strokeWeight");
+    qq.maps.event.addDomListener(strokeWeight,"click",function(){
+        polygon.setMap(map);
+        polygon.setVisible(true);
+        if(strokeWeightF){
+            strokeWeightF=false;
+            polygon.setStrokeWeight(10);
+        }else{
+            strokeWeightF=true;
+            polygon.setStrokeWeight(5);
+        }
+    });
+    //setVisible
+    var visibleTF=true;
+    var visibleT=document.getElementById("visibleT");
+    qq.maps.event.addDomListener(visibleT,"click",function(){
+        polygon.setMap(map);
+        if(visibleTF){
+            visibleTF=false;
+            polygon.setVisible(false);
+        }else{
+            visibleTF=true;
+            polygon.setVisible(true);
+        }
+    });
+}
+</script>
+</head>
+<body onload="init()">
+<div id="container"></div>
+<div id="info">
+    <button id="mapM" class="btn">setMap</button>
+    <button id="cursor" class="btn">setCursor</button>
+    <button id="fillC" class="btn">setFillColor</button>
+    <button id="path" class="btn">setPath</button>
+    <button id="strokeC" class="btn">setStrokeColor</button>
+    <button id="dash" class="btn">setStrokeDashStyle</button>
+    <button id="strokeWeight" class="btn">setStrokeWeight</button>
+    <button id="visibleT" class="btn">setVisible</button>
+</div>
+</body>
+</html>

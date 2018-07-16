@@ -1,3 +1,4 @@
+/* global qq */
 import React, { Component } from 'react'
 import './App.css'
 import { QMap, HeatMap, MarkerList, Marker, Info, Polygon, utils, config, Circle, ControlPosition } from './components'
@@ -30,6 +31,7 @@ class App extends Component {
       infoPosition: heatData[0] || defaultCenter,
       polylineVisible: true,
       strokeDashStyle: 'solid',
+      fillColor: new qq.maps.Color(0, 110, 255, 0.2),
       polygonPoints: [
         {lat: roundFun(22.53779845431509), lng: roundFun(113.93656424389837)},
         {lat: roundFun(22.540574807809087), lng: roundFun(113.93635769115447)},
@@ -121,7 +123,7 @@ class App extends Component {
   }
 
   render () {
-    const { showInfo, center, content, infoPosition, polygonPoints, radius, zoom, strokeDashStyle, heatMapData } = this.state
+    const { showInfo, center, content, infoPosition, polygonPoints, radius, zoom, strokeDashStyle, heatMapData, fillColor } = this.state
     const markerPosition = {
       ...center,
       lng: center.lng + 0.008
@@ -149,7 +151,7 @@ class App extends Component {
           <Info content={content} visible={showInfo} position={infoPosition} events={{
             closeclick: () => this.handleInfoClose()
           }} />
-          <Polygon visible points={polygonPoints} strokeDashStyle={strokeDashStyle} editable draggable events={{
+          <Polygon fillColor={fillColor} visible points={polygonPoints} strokeDashStyle={strokeDashStyle} editable draggable events={{
             adjustNode: e => this.handlePolygonChange(e),
             removeNode: e => this.handlePolygonChange(e),
             insertNode: e => this.handlePolygonChange(e)
