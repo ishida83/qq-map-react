@@ -5,6 +5,16 @@ import { QMap, HeatMap, MarkerList, Marker, Info, Polygon, utils, config, Circle
 import heatData from './data'
 import CustomerControl from './CustomControl'
 
+const generalRadius = (source, r = 4) => {
+  return source.map(curData => {
+    const radius = curData.cnt / source[0].cnt * r
+    return {
+      ...curData,
+      radius: radius < 1 ? 1 : radius
+    }
+  })
+}
+
 const heatMapOptions = {
   radius: 1,
   maxOpacity: 0.8,
@@ -57,7 +67,7 @@ class App extends Component {
         strokeDashStyle: 'dash',
         heatMapData: {
           max: 100,
-          data: heatData
+          data: generalRadius(heatData)
         }
       })
     }, 3000)
@@ -65,7 +75,6 @@ class App extends Component {
 
   handleMarkerClick = marker => {
     const { position } = marker
-    console.log('marker click')
     utils.getAddressByLatLng(position).then(result => {
       const {
         detail: { nearPois, address }
@@ -135,7 +144,7 @@ class App extends Component {
           idle: map => this.handleMapIdle(map)
         }}>
           <HeatMap heatData={heatMapData} options={heatMapOptions} />
-          <Marker
+          {/* <Marker
             position={markerPosition}
             draggable={true}
             visible
@@ -166,7 +175,7 @@ class App extends Component {
             }}
             onEdit={this.handleEdit}
             onChoose={this.handleChoose}
-          />
+          /> */}
         </QMap>
       </div>
     )
