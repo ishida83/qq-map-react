@@ -4,6 +4,7 @@ export default class Overlay extends React.Component {
   constructor (props) {
     super(props)
     this.container = null
+    this.map = null
   }
 
   draw () {
@@ -11,6 +12,9 @@ export default class Overlay extends React.Component {
   }
 
   destory () {
+    if (Object.prototype.toString.call(this.map) === '[object Null]' && this.container) {
+      this.destory()
+    }
     this.container.parentNode.removeChild(this.container)
     this.container = null
   }
@@ -32,5 +36,9 @@ export default class Overlay extends React.Component {
     if (Object.prototype.toString.call(map) === '[object Null]' && this.container) {
       this.destory()
     }
+  }
+
+  componentWillUnmount () {
+    this.destory()
   }
 }

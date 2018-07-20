@@ -5,7 +5,7 @@ import Graphy from './Graphy'
 
 export default class Marker extends Graphy {
   static defaultProps = {
-    decoration: '',
+    decoration: null,
     visible: true
   }
 

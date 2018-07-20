@@ -35,7 +35,7 @@ class QQMap extends BaseComponent {
       'zoom_changed',
       'maptypeid_changed',
       'projection_changed',
-      'idle',
+      ['idle', true],
       'tilesloaded',
       'resize'
     ]
@@ -93,6 +93,7 @@ class QQMap extends BaseComponent {
     const options = this.getOptions(this.options)
     options.center = pointToLatLng(options.center)
     this.map = new qq.maps.Map(this.mapNode, options)
+    console.log(this.map)
     this.bindEvent(this.map, this.events)
   }
 
@@ -119,8 +120,8 @@ class QQMap extends BaseComponent {
   render () {
     const { style } = this.props
     return (
-      <div className='qmap-container'>
-        <div ref={node => (this.mapNode = node)} className={this.props.className} style={style}>
+      <div className='qmap-container' style={style}>
+        <div ref={node => (this.mapNode = node)} className={this.props.className} >
           加载地图中...
           {this.renderChildren()}
           {this.onRender()}
