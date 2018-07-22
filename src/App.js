@@ -1,7 +1,8 @@
 /* global qq */
 import React, { Component } from 'react'
 import './App.css'
-import { QMap, HeatMap, MarkerList, Marker, Info, Polygon, utils, config, Circle, ControlPosition } from './components'
+import { QMap, HeatMap, MarkerList, Marker, Info, Polygon, utils, config, Circle, ControlPosition } from 'qmap'
+
 import heatData from './data'
 import CustomerControl from './CustomControl'
 
@@ -140,11 +141,16 @@ class App extends Component {
 
     return (
       <div className="App">
-        <QMap center={center} style={{ height: '800px' }} zoom={zoom} events={{
-          idle: map => this.handleMapIdle(map)
-        }}>
+        <QMap
+          center={center}
+          style={{ height: '800px' }}
+          zoom={zoom}
+          events={{
+            idle: map => this.handleMapIdle(map)
+          }}
+        >
           <HeatMap heatData={heatMapData} options={heatMapOptions} />
-          {/* <Marker
+          <Marker
             position={markerPosition}
             draggable={true}
             visible
@@ -175,7 +181,7 @@ class App extends Component {
             }}
             onEdit={this.handleEdit}
             onChoose={this.handleChoose}
-          /> */}
+          />
         </QMap>
       </div>
     )

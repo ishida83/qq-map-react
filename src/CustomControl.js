@@ -1,5 +1,5 @@
 import React from 'react'
-import { ControlPosition, Control } from './components'
+import { ControlPosition, Control } from 'qmap'
 
 export default class CustomControl extends Control {
   static defaultProps = {
