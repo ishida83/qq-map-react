@@ -1,7 +1,7 @@
 /* global qq */
 import React, { Component } from 'react'
 import './App.css'
-import { QMap, HeatMap, MarkerList, Marker, Info, Polygon, utils, config, Circle, ControlPosition } from 'qmap'
+import { QMap, HeatMap, MarkerList, Marker, Info, Polygon, utils, config, Circle, ControlPosition, GridHeatmap } from 'qmap'
 
 import heatData from './data'
 import CustomerControl from './CustomControl'
@@ -55,8 +55,36 @@ class App extends Component {
         max: 100,
         data: []
       },
+      heatData: heatData,
       radius: 100,
-      zoom: 16
+      zoom: 16,
+      gridOptions: {
+        zIndex: 2,
+        fillStyle: 'rgba(55, 50, 250, 1)',
+        shadowColor: 'rgba(255, 250, 50, 0.3)',
+        shadowBlur: 20,
+        size: 100,
+        width: 93,
+        height: 101,
+        unit: 'm',
+        globalAlpha: 0.8,
+        label: {
+          show: true,
+          fillStyle: 'white',
+          shadowColor: 'white',
+          font: '12px Arial',
+          shadowBlur: 10
+        },
+        gradient: {
+          0.16: '#ADD7FF',
+          0.32: '#87C1FF',
+          0.48: '#60A8FF',
+          0.64: '#338BFF',
+          0.78: '#0752C9',
+          1.0: '#0E3CA1'
+        },
+        draw: 'grid'
+      }
     }
   }
 
@@ -115,9 +143,19 @@ class App extends Component {
 
   handleMapIdle = map => {
     console.log('map idle')
-    this.setState({
-      map
-    })
+    const { gridOptions } = this.state
+    const dataSet = heatData.map((point, i) => ({
+      geometry: {
+        type: 'Point',
+        coordinates: [parseFloat(point.lng.toFixed(4)), parseFloat(point.lat.toFixed(4))]
+      },
+      count: heatData[i].cnt
+    }))
+
+    const max = Math.max(...heatData.map(item => item.cnt))
+    this.map = map
+    gridOptions.max = max
+    this.gridHeatmap = new GridHeatmap(map, dataSet, gridOptions)
   }
 
   handleChange = val => {
@@ -133,7 +171,7 @@ class App extends Component {
   }
 
   render () {
-    const { showInfo, center, content, infoPosition, polygonPoints, radius, zoom, strokeDashStyle, heatMapData, fillColor } = this.state
+    const { showInfo, center, content, infoPosition, polygonPoints, radius, zoom, strokeDashStyle, heatMapData, fillColor, gridOptions } = this.state
     const markerPosition = {
       ...center,
       lng: center.lng + 0.008
@@ -142,16 +180,18 @@ class App extends Component {
     return (
       <div className="App">
         <QMap
-          center={center}
-          style={{ height: '800px' }}
+          center={{
+            lat: 22.54073,
+            lng: 113.933571
+          }}
+          style={{ height: '1000px' }}
           zoom={zoom}
           events={{
-            idle: map => this.handleMapIdle(map)
+            idle: this.handleMapIdle
           }}
         >
-          <HeatMap heatData={heatMapData} options={heatMapOptions} />
           <Marker
-            position={markerPosition}
+            position={heatData[0]}
             draggable={true}
             visible
             decoration="10"
@@ -166,6 +206,7 @@ class App extends Component {
           <Info content={content} visible={showInfo} position={infoPosition} events={{
             closeclick: () => this.handleInfoClose()
           }} />
+          {/* <HeatMap heatData={heatMapData} options={heatMapOptions} />
           <Polygon fillColor={fillColor} visible points={polygonPoints} strokeDashStyle={strokeDashStyle} editable draggable events={{
             adjustNode: e => this.handlePolygonChange(e),
             removeNode: e => this.handlePolygonChange(e),
@@ -181,7 +222,7 @@ class App extends Component {
             }}
             onEdit={this.handleEdit}
             onChoose={this.handleChoose}
-          />
+          /> */}
         </QMap>
       </div>
     )

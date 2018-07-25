@@ -15,7 +15,9 @@
     "eject": "react-scripts eject"
   },
   "standard": {
-    "plugins": ["html"],
+    "plugins": [
+      "html"
+    ],
     "parser": "babel-eslint"
   },
   "devDependencies": {
