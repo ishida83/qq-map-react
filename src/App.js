@@ -60,30 +60,16 @@ class App extends Component {
       zoom: 16,
       gridOptions: {
         zIndex: 2,
-        fillStyle: 'rgba(55, 50, 250, 1)',
-        shadowColor: 'rgba(255, 250, 50, 0.3)',
-        shadowBlur: 20,
         size: 100,
-        width: 93,
-        height: 101,
-        unit: 'm',
-        globalAlpha: 0.8,
+        width: 92,
+        height: 100,
+        unit: 'px',
+        globalAlpha: 0.7,
         label: {
           show: true,
-          fillStyle: 'white',
-          shadowColor: 'white',
-          font: '12px Arial',
-          shadowBlur: 10
-        },
-        gradient: {
-          0.16: '#ADD7FF',
-          0.32: '#87C1FF',
-          0.48: '#60A8FF',
-          0.64: '#338BFF',
-          0.78: '#0752C9',
-          1.0: '#0E3CA1'
-        },
-        draw: 'grid'
+          fillStyle: '#fff',
+          font: '12px Arial'
+        }
       }
     }
   }
@@ -188,6 +174,10 @@ class App extends Component {
           zoom={zoom}
           events={{
             idle: this.handleMapIdle
+          }}
+          scaleControl={true}
+          scaleControlOptions={{
+            position: qq.maps.ControlPosition.BOTTOM_RIGHT
           }}
         >
           <Marker
