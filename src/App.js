@@ -1,7 +1,7 @@
 /* global qq */
 import React, { Component } from 'react'
 import './App.css'
-import { QMap, HeatMap, MarkerList, Marker, Info, Polygon, utils, config, Circle, ControlPosition, GridHeatmap } from 'qmap'
+import { QMap, Overlay, HeatMap, MarkerList, Marker, Info, Polygon, utils, config, Circle, ControlPosition, GridHeatmap } from '@tencent/react-tmap'
 
 import heatData from './data'
 import CustomerControl from './CustomControl'
@@ -60,10 +60,12 @@ class App extends Component {
       zoom: 16,
       gridOptions: {
         zIndex: 2,
-        size: 100,
+        size: 90,
         width: 92,
         height: 100,
-        unit: 'px',
+        unit: 'm',
+        countField: 'cnt',
+        useLocalExtrema: false,
         globalAlpha: 0.7,
         label: {
           show: true,
@@ -75,11 +77,16 @@ class App extends Component {
   }
 
   componentDidMount () {
+    const { polygonPoints } = this.state
     setTimeout(() => {
       this.setState({
         polylineVisible: false,
         radius: 1000,
         strokeDashStyle: 'dash',
+        polygonPoints: polygonPoints.map(item => ({
+          lat: item.lat + 0.002,
+          lng: item.lng + 0.002
+        })),
         heatMapData: {
           max: 100,
           data: generalRadius(heatData)
@@ -130,18 +137,9 @@ class App extends Component {
   handleMapIdle = map => {
     console.log('map idle')
     const { gridOptions } = this.state
-    const dataSet = heatData.map((point, i) => ({
-      geometry: {
-        type: 'Point',
-        coordinates: [parseFloat(point.lng.toFixed(4)), parseFloat(point.lat.toFixed(4))]
-      },
-      count: heatData[i].cnt
-    }))
 
-    const max = Math.max(...heatData.map(item => item.cnt))
     this.map = map
-    gridOptions.max = max
-    this.gridHeatmap = new GridHeatmap(map, dataSet, gridOptions)
+    // this.gridHeatmap = new GridHeatmap(map, heatData, gridOptions)
   }
 
   handleChange = val => {
@@ -154,6 +152,10 @@ class App extends Component {
 
   handleChoose = () => {
     window.alert('选择')
+  }
+
+  handleOverlayClick = () => {
+    console.log('overlay click')
   }
 
   render () {
@@ -180,7 +182,35 @@ class App extends Component {
             position: qq.maps.ControlPosition.BOTTOM_RIGHT
           }}
         >
+          <Overlay
+            position={{
+              lat: 22.54073,
+              lng: 113.933571
+            }}
+            offset={{
+              x: 20,
+              y: 0
+            }}
+            style={{
+              backgroundColor: 'green'
+            }}
+          >
+            <div className="overlay" onClick={this.handleOverlayClick}>这是自定义 overlay</div>
+          </Overlay>
           <Marker
+            position={{
+              lat: 22.54073,
+              lng: 113.933571
+            }}
+            draggable={true}
+            visible
+            decoration="10"
+            animation={config.ANIMATION_DROP}
+            events={{
+              click: this.handleMarkerClick
+            }}
+          />
+          {/*  <Marker
             position={heatData[0]}
             draggable={true}
             visible
@@ -196,12 +226,12 @@ class App extends Component {
           <Info content={content} visible={showInfo} position={infoPosition} events={{
             closeclick: () => this.handleInfoClose()
           }} />
-          {/* <HeatMap heatData={heatMapData} options={heatMapOptions} />
           <Polygon fillColor={fillColor} visible points={polygonPoints} strokeDashStyle={strokeDashStyle} editable draggable events={{
             adjustNode: e => this.handlePolygonChange(e),
             removeNode: e => this.handlePolygonChange(e),
             insertNode: e => this.handlePolygonChange(e)
           }} />
+          <HeatMap heatData={heatMapData} options={heatMapOptions} />
           <Circle center={center} radius={radius} strokeColor="#666" strokeDashStyle="dash" strokeWeight={2} events={{
             radius_changed: (circle, e) => this.handleRadiusChange(radius, circle, e)
           }} />
